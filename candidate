@@ -1,0 +1,80 @@
+import numpy as np
+import pandas as pd
+data = pd.read_csv('enjoysport.csv',index_col='Example')
+concepts = data.values[:,:-1]
+target = data.values[:,-1]
+def learn(concepts, target):
+	for i in range(len(concepts)):
+		if target[i] == 'Yes':
+			specific_h = concepts[i].copy()
+			break
+	print("initialization of specific_h and general_h")
+	print(specific_h)
+	general_h = [["?" for i in range(len(specific_h))] for i in range(len(specific_h))]
+	print(general_h)
+	for i, h in enumerate(concepts):
+		if target[i] == "Yes":
+			for x in range(len(specific_h)):
+				if h[x] != specific_h[x]:
+					specific_h[x] = '?'
+					general_h[x][x] = '?'
+		if target[i] == "No":
+			for x in range(len(specific_h)):
+				if h[x] != specific_h[x]:
+					general_h[x][x] = specific_h[x]
+				else:
+					general_h[x][x] = '?'
+					print(" steps of Candidate Elimination Algorithm",i+1)
+					print(specific_h)
+					print(general_h)
+	general_h = list(filter(lambda x : np.any(np.array(x) != '?'),general_h))
+	return specific_h, general_h
+s_final, g_final = learn(concepts, target)
+print("\nFinal Specific_h:", s_final, sep="\n")
+print("Final General_h:", g_final, sep="\n")
+
+
+
+
+
+
+
+initialization of specific_h and general_h
+['Sunny' 'Warm' 'Normal' 'Strong' 'Warm' 'Same']
+[['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?',
+'?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'],
+['?', '?', '?', '?', '?', '?']]
+steps of Candidate Elimination Algorithm 3
+2['Sunny' 'Warm' '?' 'Strong' 'Warm' 'Same']
+[['Sunny', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?',
+'?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?',
+'?'], ['?', '?', '?', '?', '?', '?']]
+steps of Candidate Elimination Algorithm 3
+['Sunny' 'Warm' '?' 'Strong' 'Warm' 'Same']
+[['Sunny', '?', '?', '?', '?', '?'], ['?', 'Warm', '?', '?', '?', '?'], ['?',
+'?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?',
+'?', '?'], ['?', '?', '?', '?', '?', '?']]
+steps of Candidate Elimination Algorithm 3
+['Sunny' 'Warm' '?' 'Strong' 'Warm' 'Same']
+[['Sunny', '?', '?', '?', '?', '?'], ['?', 'Warm', '?', '?', '?', '?'], ['?',
+'?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?',
+'?', '?'], ['?', '?', '?', '?', '?', '?']]
+steps of Candidate Elimination Algorithm 3
+['Sunny' 'Warm' '?' 'Strong' 'Warm' 'Same']
+[['Sunny', '?', '?', '?', '?', '?'], ['?', 'Warm', '?', '?', '?', '?'], ['?',
+'?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?',
+'?', '?'], ['?', '?', '?', '?', '?', '?']]
+steps of Candidate Elimination Algorithm 3
+['Sunny' 'Warm' '?' 'Strong' 'Warm' 'Same']
+[['Sunny', '?', '?', '?', '?', '?'], ['?', 'Warm', '?', '?', '?', '?'], ['?',
+'?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?',
+'?', '?'], ['?', '?', '?', '?', '?', '?']]
+steps of Candidate Elimination Algorithm 3
+['Sunny' 'Warm' '?' 'Strong' 'Warm' 'Same']
+[['Sunny', '?', '?', '?', '?', '?'], ['?', 'Warm', '?', '?', '?', '?'], ['?',
+'?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?',
+'?', '?'], ['?', '?', '?', '?', '?', 'Same']]
+Final Specific_h:
+['Sunny' 'Warm' '?' 'Strong' '?' '?']
+Final General_h:
+[['Sunny', '?', '?', '?', '?', '?'], ['?', 'Warm', '?', '?', '?', '?']]
